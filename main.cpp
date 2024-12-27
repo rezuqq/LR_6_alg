@@ -56,11 +56,12 @@ Node** matrixToList(int** G, int size) {
     Node** adjList = (Node**)malloc(size * sizeof(Node*));
 
     for (int i = 0; i < size; i++) {
-        adjList[i] = NULL; // Изначально список пуст
+        adjList[i] = NULL;
         for (int j = 0; j < size; j++) {
             if (G[i][j] == 1) {
-                Node* newNode = createNode(j);  // Создаем узел для вершины j
-                newNode->next = adjList[i];    // Добавляем в начало списка
+                Node* newNode = createNode(j);
+                // Добавляем в начало списка
+                newNode->next = adjList[i];
                 adjList[i] = newNode;
             }
         }
@@ -104,7 +105,6 @@ int** delG(int** G, int size, int v) {
             }
         }
     }
-
     free_matrix(G, size);
     return Gtemp;
 }
@@ -125,13 +125,13 @@ int** unionV(int** G, int size, int v1, int v2) {
     return G;
 }
 
-// удаление ребра между двумя вершинами
+// Расщепление ребра между двумя вершинами
 int** contrE(int** G, int size, int v1, int v2) {
     if (G[v1][v2] != 1) {
         printf("Ребра нет\n");
         return G;
     }
-    else {
+    else if (G[v1][v2] == 1) {
         G[v1][v2] = 0;
         G[v2][v1] = 0;
 
@@ -202,7 +202,7 @@ int** xorG(int** G1, int size1, int** G2, int size2) {
     for (int i = 0; i < maxSize; i++) {
         Gtemp[i] = (int*)malloc(maxSize * sizeof(int));
         for (int j = 0; j < maxSize; j++) {
-            Gtemp[i][j] = 0;  // Инициализация нулями
+            Gtemp[i][j] = 0;
         }
     }
 
@@ -214,7 +214,8 @@ int** xorG(int** G1, int size1, int** G2, int size2) {
 
     for (int i = 0; i < size2; i++) {
         for (int j = 0; j < size2; j++) {
-            Gtemp[i][j] ^= G2[i][j];  // Выполнение операции XOR
+            //XOR
+            Gtemp[i][j] ^= G2[i][j];
         }
     }
 
@@ -229,7 +230,7 @@ int** ringSum(int** G1, int size1, int** G2, int size2) {
     for (int i = 0; i < newSize; i++) {
         Gnew[i] = (int*)malloc(newSize * sizeof(int));
         for (int j = 0; j < newSize; j++) {
-            Gnew[i][j] = 0;  // Инициализация нулями
+            Gnew[i][j] = 0;
         }
     }
 
@@ -257,11 +258,11 @@ void showMenu() {
     printf("\nВыберите операцию:\n");
     printf("1. Удаление вершины\n");
     printf("2. Объединение вершин\n");
-    printf("3. Удаление ребра между вершинами\n");
+    printf("3. Расщепление ребра между вершинами\n");
     printf("4. Разделение вершины\n");
     printf("5. Объединение двух графов\n");
     printf("6. Кольцевая сумма двух графов\n");
-    printf("7. XOR двух графов\n");
+    printf("7. XOR двух матриц\n");
     printf("8. Выход\n");
     printf("Ваш выбор: ");
 }
@@ -271,7 +272,6 @@ int main() {
     setlocale(LC_ALL, "Rus");
     int size1 = 0, size2 = 0, verticle1 = 0, verticle2 = 0;
     int choice, v1, v2;
-
     printf("Введите размер первой матрицы: ");
     scanf("%d", &size1);
     printf("Введите размер второй матрицы: ");
@@ -334,7 +334,6 @@ int main() {
             scanf("%d %d", &v1, &v2);
             G1 = contrE(G1, size1, v1, v2);
             printG(G1, size1);
-
             printf("\nВведите две вершины для удаления ребра между вершинами во второй матрице: ");
             scanf("%d %d", &v1, &v2);
             G2 = contrE(G2, size2, v1, v2);
@@ -382,7 +381,6 @@ int main() {
 
         case 8:
             printf("Выход из программы\n");
-            // Освобождение памяти
             free_matrix(G1, size1);
             free_matrix(G2, size2);
             for (int i = 0; i < size1; i++) {
